@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "src/bitdoglab.h"
-#include "src/hardware.h"
-#include "neopixel.h"
+#include "libs/bitdoglab.h"
+#include "libs/hardware.h"
+#include "libs/neopixel.h"
 
 
 // Matriz de LEDs
@@ -17,3 +17,4 @@ void set_matrix_pixel(int r, int g, int b) {
     }
     np_write();
 }
+

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "src/bitdoglab.h"
-#include "src/hardware.h"
+#include "libs/bitdoglab.h"
+#include "libs/hardware.h"
 #include "hardware/adc.h"
 #include "hardware/i2c.h"
 #include "hardware/pwm.h"
@@ -16,6 +16,7 @@ void hardware_init() {
     
     // Matriz de LEDs
     led_matrix_init();
+
     // Botões
     gpio_init(button_A);
     gpio_set_dir(button_A, GPIO_IN);
@@ -54,20 +55,6 @@ int main() {
 
     uint16_t brilho = 0;
 
-    /*while (true) {
-        
-        // Exemplo com Botões:
-        // Pressionar Botão A deixa o LED Azul bem fraco (brilho = 200)
-        if (gpio_get(button_A) == 0) {
-            pwm_set_gpio_level(LED_BLUE, 400); 
-        } 
-        // Pressionar Botão B deixa o LED Azul no brilho máximo (brilho = 4095)
-        else if (gpio_get(button_B) == 0) {
-            pwm_set_gpio_level(LED_BLUE, 4095); 
-        } else {
-            pwm_set_gpio_level(LED_BLUE, 0);
-        }
-    }*/
     while (true) {
         if (gpio_get(joy_sw) == 0) {
             set_matrix_pixel(0,0,30);

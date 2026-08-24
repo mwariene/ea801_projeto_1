@@ -41,8 +41,12 @@ pico_sdk_init()
 
 add_executable(codigo_base
     codigo_base.c
-    src/led_rgb.c
-    src/led_matrix.c
+    libs/buzzer/buzzer.c
+    libs/display-oled/display-oled.c
+    libs/joystick/joystick.c
+    libs/leb_rgb/led_rgb.c
+    libs/led_matrix/led_matrix.c
+    libs/microphone/microphone.c
 )
 
 pico_set_program_name(codigo_base "codigo_base")
@@ -63,12 +67,18 @@ target_link_libraries(codigo_base
         hardware_i2c
         hardware_pio
         hardware_pwm
+        hardware_dma
         hardware_clocks
+        m
 )
 
 target_include_directories(codigo_base PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/libs
+        ${CMAKE_CURRENT_LIST_DIR}/libs/buzzer
+        ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
+        ${CMAKE_CURRENT_LIST_DIR}/libs/joystick
+        ${CMAKE_CURRENT_LIST_DIR}/libs/microphone
 )
 
 pico_add_extra_outputs(codigo_base)
