@@ -1,9 +1,6 @@
 
 #include "bitdoglab.h"
 
-#ifndef BITDOGLAB_H
-#define BITDOGLAB_H
-
 #include "pico/stdlib.h"
 #include <stdio.h>
 #include <string.h>

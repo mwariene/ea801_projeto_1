@@ -1,5 +1,7 @@
 #include "buzzer.h"
 #include "hardware.h"
+#include "hardware/clocks.h"
+#include "hardware/pwm.h"
 
 static uint slice_num;
 
