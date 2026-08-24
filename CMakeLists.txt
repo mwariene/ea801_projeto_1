@@ -40,12 +40,13 @@ project(codigo_base C CXX ASM)
 pico_sdk_init()
 
 add_executable(codigo_base
-    codigo_base.c
+    main.c
     libs/buzzer/buzzer.c
-    libs/joystick/joystick.c
     libs/leb_rgb/led_rgb.c
     libs/led_matrix/led_matrix.c
     libs/microphone/microphone.c
+    libs/inputs/buttons.c
+    libs/inputs/joystick.c
 )
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/libs/display-oled/inc/ssd1306.h")
@@ -75,7 +76,6 @@ target_link_libraries(codigo_base
         hardware_pwm
         hardware_dma
         hardware_clocks
-        m
 )
 
 target_include_directories(codigo_base PRIVATE

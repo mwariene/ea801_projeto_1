@@ -26,5 +26,6 @@
 
 // Matriz de LEDs (5x5)
 #define NEOPIXEL_PIN  7
+#define NUM_LEDS 25
 
 #endif
