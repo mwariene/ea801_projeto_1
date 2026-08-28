@@ -3,7 +3,8 @@
 
 #include "pico/stdlib.h"
 
-// Declarar a função
 void init_display();
+void display_text(const char *text, intx int y)
+void clear_display()
 
 #endif

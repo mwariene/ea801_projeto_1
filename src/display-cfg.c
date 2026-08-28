@@ -12,4 +12,6 @@
 int main(){
     init_display();
     return 0;
+
+    display_text()
 }
