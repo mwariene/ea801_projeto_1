@@ -7,9 +7,11 @@
 #define I2C_SDA_PIN 4
 #define I2C_SCL_PIN 3
 
-void init_display() {
-    stdio_init_all();
+// 1. Criação do Buffer e da Área de Renderização como GLOBAIS no módulo
+static uint8_t ssd[ssd1306_buffer_length];
+static struct render_area frame_area;
 
+void init_display() {
     i2c_init(i2c1, ssd1306_i2c_clock * 1000);
     gpio_set_function(I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(I2C_SCL_PIN, GPIO_FUNC_I2C);
@@ -29,61 +31,34 @@ void init_display() {
 
     ssd1306_init();
 
-    struct render_area frame_area = {
-        start_column : 0, // coluna inicial -> faixa de largura que vai ser atualizada
-        end_column : ssd1306_width - 1, // coluna final
-        start_page : 0, // página inicial - cada página = 8 pixels de altura -> faixa de altura que vai ser atualizada
-        end_page : ssd1306_n_pages - 1 // página final
-    };
+    // Configura a área de renderização global
+    frame_area.start_column = 0;
+    frame_area.end_column = ssd1306_width - 1;
+    frame_area.start_page = 0;
+    frame_area.end_page = ssd1306_n_pages - 1;
 
     calculate_render_area_buffer_length(&frame_area);
 
-    uint8_t ssd[ssd1306_buffer_length];
+    // Limpa o buffer inicial e manda para a tela
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, &frame_area);
 }
 
-/*
-/* @brief escreve o texto na tela
-
-/* @param num1 texto que você quer escrever entre aspas
-/* @param num2 posicao inicial no eixo x
-/* @param num3 posicao inicial no eixo y
-/* @param obs (0,0) fica no canto ESQUERDO SUPERIOR
-
-/* @return texto no display
-*/
-void display_text(const char *text, int x, int y){
-    struct render_area frame_area ={
-        start_column : 0,
-        end_column : ssd1306_width - 1,
-        start_page : 0,
-        end_page : ssd1306_n_pages - 1
-    }
-    uint8_t ssd[ssd1306_buffer_length];
-    memset(ssd, 0, ssd1306_buffer_length);
-
-    ssd1306_write_text(ssd, text, x, y);
+// 2. Função EXCLUSIVA para atualizar a tela
+void display_update() {
     render_on_display(ssd, &frame_area);
+}
+
+// 3. Funções de desenho agora APENAS modificam o buffer 'ssd'
+void display_text(const char *text, int x, int y){
+    ssd1306_write_text(ssd, text, x, y);
 }
 
 void clear_display(){
-    struct render_area frame_area ={
-        start_column : 0,
-        end_column : ssd1306_width - 1,
-        start_page : 0,
-        end_page : ssd1306_n_pages - 1
-    }
-    uint8_t ssd[ssd1306_buffer_length];
-    memset(ssd, 0, ssd1306_buffer_length);
-
-    render_on_display(ssd, &frame_area);
+    memset(ssd, 0, ssd1306_buffer_length); // Apenas zera a memória
 }
 
-void write_pixel(int x, int y){
-    struct render_area frame_area = {
-        start
-    }
-    ssd1306_set_pixel(ssd, x, y, true);
-    render_on_display(ssd, 0, ssd1306_buffer_length);
+void write_pixel(int x, int y, bool on){
+    // O parâmetro 'on' permite tanto desenhar (true) quanto apagar (false) o pixel
+    ssd1306_set_pixel(ssd, x, y, on);
 }

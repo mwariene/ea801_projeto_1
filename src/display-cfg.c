@@ -10,6 +10,7 @@
 
 // parte comum a todos os códigos de display
 int main(){
+    stdio_init_all();
     init_display();
     return 0;
 

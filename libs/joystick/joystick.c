@@ -4,7 +4,6 @@
 #include "joystick.h"
 
 void joystick_init(void){
-    stdio_init_all();
     adc_init();
     adc_gpio_init(joystick_x_pin); // ADC0 - X-axis
     adc_gpio_init(joystick_y_pin); // ADC1 - Y-axis
@@ -14,12 +13,12 @@ void joystick_init(void){
     gpio_pull_up(joystick_sw_pin); // Enable pull-up resistor for the switch
 }
 
-uint8_t joystick_read_x(void){
+uint16_t joystick_read_x(void){
     adc_select_input(0); // Select ADC0 for X-axis
     return adc_read(); // Read and return the X-axis value
 }
 
-uint8_t joystick_read_y(void){
+uint16_t joystick_read_y(void){
     adc_select_input(1); // Select ADC1 for Y-axis
     return adc_read(); // Read and return the Y-axis value
 }

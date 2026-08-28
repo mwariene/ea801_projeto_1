@@ -8,7 +8,7 @@
 #define joystick_sw_pin 22
 
 void joystick_init(void);
-uint8_t joystick_read_x(void);
-uint8_t joystick_read_y(void);
+uint16_t joystick_read_x(void);
+uint16_t joystick_read_y(void);
 bool joystick_button_pressed(void);
 #endif
