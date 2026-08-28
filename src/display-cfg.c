@@ -13,5 +13,6 @@ int main(){
     init_display();
     return 0;
 
-    display_text()
+    display_text("Menu", 3, 2)
+    write_pixel(2,3)
 }
