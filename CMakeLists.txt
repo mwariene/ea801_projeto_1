@@ -49,10 +49,20 @@ add_executable(codigo_base
     libs/microphone/microphone.c
 )
 
+add_executable(display_cfg
+    src/display-cfg.c
+)
+
+add_executable(joystick_plus_display
+    src/joystick-cfg.c    
+)
+
 pico_set_program_name(codigo_base "codigo_base")
 pico_set_program_version(codigo_base "0.1")
 pico_set_program_name(display_cfg "display_cfg")
 pico_set_program_version(display_cfg "0.1")
+pico_set_program_name(joystick_plus_display "joy+disp")
+pico_set_program_version(joystick_plus_display "0.1")
 
 # Comentado para não dar erro enquanto você não tiver o arquivo .pio criado
 # pico_generate_pio_header(codigo_base ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
@@ -97,3 +107,18 @@ target_include_directories(display_cfg PRIVATE
 pico_enable_stdio_uart(display_cfg 0)
 pico_enable_stdio_usb(display_cfg 1)
 pico_add_extra_outputs(display_cfg)
+
+target_link_libraries(joystick_plus_display
+    pico_stdlib
+    hardware_i2c
+)
+
+target_include_directories(joystick_plus_display
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/libs
+    ${CMAKE_CURRENT_LIST_DIR}/libs/joystick
+)
+
+pico_enable_stdio_uart(joystick_plus_display 0)
+pico_enable_stdio_usb(joystick_plus_display 1)
+pico_add_extra_outputs(joystick_plus_display)
