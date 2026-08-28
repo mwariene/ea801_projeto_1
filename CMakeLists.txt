@@ -43,7 +43,6 @@ add_executable(codigo_base
     codigo_base.c
     libs/leb_rgb/led_rgb.c
     libs/led_matrix/led_matrix.c
-    src/display-cfg.c
 )
 
 add_executable(display_cfg
