@@ -1,8 +1,7 @@
 #include "pico/stdlib.h"   // Para funções gerais de GPIO
 #include "hardware/pwm.h"  // Define GPIO_FUNC_PWM e funções do PWM
 #include "bitdoglab.h"
-#include "src/hardware.h"
-#include "src/bitdoglab.h"
+#include "hardware.h"
 #include "hardware/pwm.h"
 
 /* Configuração comum (sem PWM)

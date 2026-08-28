@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "src/bitdoglab.h"
-#include "src/hardware.h"
+#include "bitdoglab.h"
+#include "hardware.h"
 #include "neopixel.h"
 
 

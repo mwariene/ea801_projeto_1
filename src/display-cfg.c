@@ -4,24 +4,33 @@
 #include <ctype.h>
 #include "pico/stdlib.h"
 #include "pico/binary_info.h"
-#include "inc/ssd1306.h"
+#include "..\libs\display-oled\ssd1306.h"
 #include "hardware/i2c.h"
 
-const uint I2C_SDA = 14;
-const uint I2C_SCL = 15;
+const uint I2C_SDA = 4;
+const uint I2C_SCL = 3;
 
 int main()
 {
-    stdio_init_all();   // Inicializa os tipos stdio padrão presentes ligados ao binário
+    stdio_init_all();
 
-    // Inicialização do i2c
     i2c_init(i2c1, ssd1306_i2c_clock * 1000);
     gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
     gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
     gpio_pull_up(I2C_SDA);
     gpio_pull_up(I2C_SCL);
 
-    // Processo de inicialização completo do OLED SSD1306
+    uint8_t test = 0;
+    int ret = i2c_read_blocking(i2c1, 0x3C, &test, 1, false);
+    printf("I2C probe ret = %d\n", ret);
+
+    if (ret < 0) {
+        while (true) {
+            printf("OLED NAO RESPONDE NO ENDERECO 0x3C\n");
+            sleep_ms(500);
+        }
+    }
+
     ssd1306_init();
 
     // Preparar área de renderização para o display (ssd1306_width pixels por ssd1306_n_pages páginas)
@@ -44,8 +53,8 @@ restart:
 // Parte do código para exibir a mensagem no display (opcional: mudar ssd1306_height para 32 em ssd1306_i2c.h)
 // /**
     char *text[] = {
-        "  Bem-vindos!   ",
-        "  Embarcatech   "};
+        "  Hello   ",
+        "  World!   "};
 
     int y = 0;
     for (uint i = 0; i < count_of(text); i++)
