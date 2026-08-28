@@ -30,10 +30,10 @@ void init_display() {
     ssd1306_init();
 
     struct render_area frame_area = {
-        start_column : 0,
-        end_column : ssd1306_width - 1,
-        start_page : 0,
-        end_page : ssd1306_n_pages - 1
+        start_column : 0, // coluna inicial -> faixa de largura que vai ser atualizada
+        end_column : ssd1306_width - 1, // coluna final
+        start_page : 0, // página inicial - cada página = 8 pixels de altura -> faixa de altura que vai ser atualizada
+        end_page : ssd1306_n_pages - 1 // página final
     };
 
     calculate_render_area_buffer_length(&frame_area);
@@ -78,4 +78,12 @@ void clear_display(){
     memset(ssd, 0, ssd1306_buffer_length);
 
     render_on_display(ssd, &frame_area);
+}
+
+void write_pixel(int x, int y){
+    struct render_area frame_area = {
+        start
+    }
+    ssd1306_set_pixel(ssd, x, y, true);
+    render_on_display(ssd, 0, ssd1306_buffer_length);
 }

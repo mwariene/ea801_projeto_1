@@ -4,7 +4,8 @@
 #include "pico/stdlib.h"
 
 void init_display();
-void display_text(const char *text, intx int y)
-void clear_display()
+void display_text(const char *text, intx int y);
+void clear_display();
+void write_pixel();
 
 #endif
