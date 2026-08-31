@@ -8,6 +8,8 @@
 #include "ssd1306_font.h"
 #include "ssd1306_i2c.h"
 
+static uint8_t i2c_tx_buffer[1025];
+
 // Calcular quanto do buffer será destinado à área de renderização
 void calculate_render_area_buffer_length(struct render_area *area) {
     area->buffer_length = (area->end_column - area->start_column + 1) * (area->end_page - area->start_page + 1);
@@ -28,14 +30,13 @@ void ssd1306_send_command_list(uint8_t *ssd, int number) {
 
 // Copia buffer de referência num novo buffer, a fim de adicionar o byte de controle desde o início
 void ssd1306_send_buffer(uint8_t ssd[], int buffer_length) {
-    uint8_t *temp_buffer = malloc(buffer_length + 1);
-
-    temp_buffer[0] = 0x40;
-    memcpy(temp_buffer + 1, ssd, buffer_length);
-
-    i2c_write_blocking(i2c1, ssd1306_i2c_address, temp_buffer, buffer_length + 1, false);
-
-    free(temp_buffer);
+    i2c_tx_buffer[0] = 0x40; // Byte de controle de dados
+    
+    // Copia o frame_buffer para o buffer de transmissão
+    memcpy(i2c_tx_buffer + 1, ssd, buffer_length); 
+    
+    // Envia tudo de forma estável
+    i2c_write_blocking(i2c1, ssd1306_i2c_address, i2c_tx_buffer, buffer_length + 1, false);
 }
 
 // Cria a lista de comandos (com base nos endereços definidos em ssd1306_i2c.h) para a inicialização do display

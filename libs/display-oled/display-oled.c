@@ -1,10 +1,10 @@
 #include "display-oled.h"
 #include <stdio.h>
 #include <string.h>
-#include "inc/ssd1306.h"
+#include "ssd1306.h"
 #include "hardware/i2c.h"
 
-#define I2C_SDA_PIN 4
+#define I2C_SDA_PIN 2
 #define I2C_SCL_PIN 3
 
 // 1. Criação do Buffer e da Área de Renderização como GLOBAIS no módulo
@@ -40,7 +40,7 @@ void init_display() {
     calculate_render_area_buffer_length(&frame_area);
 
     // Limpa o buffer inicial e manda para a tela
-    memset(ssd, 0, ssd1306_buffer_length);
+    memset(ssd, 0xFF, ssd1306_buffer_length);
     render_on_display(ssd, &frame_area);
 }
 
@@ -51,7 +51,7 @@ void display_update() {
 
 // 3. Funções de desenho agora APENAS modificam o buffer 'ssd'
 void display_text(const char *text, int x, int y){
-    ssd1306_write_text(ssd, text, x, y);
+    ssd1306_draw_string(ssd, x, y, (char *)text);
 }
 
 void clear_display(){

@@ -4,7 +4,8 @@
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
 
-stdio_init_all();
+int joystick_main() {
+    stdio_init_all();
 
 while(1){
     uint16_t x = joystick_read_x();
@@ -25,5 +26,7 @@ while(1){
 
     display_update();
 
-    sleep_ms();
+    sleep_ms(100);
+    }
+    return 0;
 }
