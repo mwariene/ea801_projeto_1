@@ -14,8 +14,8 @@
 #define button_C    10
 
 // Joystick (ADC)
-#define joy_x       1   // GPIO27
-#define joy_y       0   // GPIO26
+#define joy_x       27   // ADC 1
+#define joy_y       26   // ADC 0
 #define joy_sw      22
 
 // OLED 1107 (I2C1)

@@ -47,14 +47,11 @@ add_executable(codigo_base
     libs/microphone/microphone.c
     libs/inputs/buttons.c
     libs/inputs/joystick.c
+    libs/display-oled/display-oled.c
+    libs/display-oled/ssd1306.c
 )
 
-if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/libs/display-oled/inc/ssd1306.h")
-    target_sources(codigo_base PRIVATE libs/display-oled/display-oled.c)
-    target_include_directories(codigo_base PRIVATE
-            ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
-    )
-endif()
+
 
 pico_set_program_name(codigo_base "codigo_base")
 pico_set_program_version(codigo_base "0.1")
