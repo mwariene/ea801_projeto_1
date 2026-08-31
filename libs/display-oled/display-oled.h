@@ -1,5 +1,5 @@
-#ifndef DISPLAY_OLED_H
-#define DISPLAY_OLED_H
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 #include "pico/stdlib.h"
 

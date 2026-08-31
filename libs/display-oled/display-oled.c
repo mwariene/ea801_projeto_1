@@ -6,8 +6,8 @@
 #include "ssd1306.h"
 #include "../bitdoglab.h"
 
-static uint8_t ssd_buffer[ssd1306_buffer_length];
-static struct render_area frame_area;
+void init_display() {
+    stdio_init_all();
 
 void clean_display(void);
 

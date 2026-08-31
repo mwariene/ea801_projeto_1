@@ -55,6 +55,8 @@ add_executable(codigo_base
 
 pico_set_program_name(codigo_base "codigo_base")
 pico_set_program_version(codigo_base "0.1")
+pico_set_program_name(display_cfg "display_cfg")
+pico_set_program_version(display_cfg "0.1")
 
 # Comentado para não dar erro enquanto você não tiver o arquivo .pio criado
 # pico_generate_pio_header(codigo_base ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
@@ -78,10 +80,23 @@ target_link_libraries(codigo_base
 target_include_directories(codigo_base PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/libs
-        ${CMAKE_CURRENT_LIST_DIR}/libs/buzzer
-        ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
-        ${CMAKE_CURRENT_LIST_DIR}/libs/joystick
-        ${CMAKE_CURRENT_LIST_DIR}/libs/microphone
 )
 
 pico_add_extra_outputs(codigo_base)
+
+# Exemplo do display OLED
+# Em seguida, no VS Code, selecione o target display_cfg como ativo antes de fazer upload.
+target_link_libraries(display_cfg
+        pico_stdlib
+        hardware_i2c
+)
+
+target_include_directories(display_cfg PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/libs
+        ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
+)
+
+pico_enable_stdio_uart(display_cfg 0)
+pico_enable_stdio_usb(display_cfg 1)
+pico_add_extra_outputs(display_cfg)
