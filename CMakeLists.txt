@@ -39,12 +39,14 @@ project(codigo_base C CXX ASM)
 
 pico_sdk_init()
 
+# Executável principal unificado com todos os módulos e o main.c
 add_executable(codigo_base
     src/display-cfg.c              # O seu arquivo principal de teste atual
     libs/display-oled/ssd1306_i2c.c # O driver básico do display
     libs/display-oled/display-oled.c # <-- ADICIONE O SEU ARQUIVO DE FUNÇÕES AQUI!
 )
 
+<<<<<<< Updated upstream
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/libs/display-oled/inc/ssd1306.h")
     target_sources(codigo_base PRIVATE libs/display-oled/display-oled.c)
     target_include_directories(codigo_base PRIVATE
@@ -52,6 +54,8 @@ if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/libs/display-oled/inc/ssd1306.h")
     )
 endif()
 
+=======
+>>>>>>> Stashed changes
 pico_set_program_name(codigo_base "codigo_base")
 pico_set_program_version(codigo_base "0.1")
 
@@ -63,7 +67,7 @@ pico_enable_stdio_usb(codigo_base 1)
 
 pico_generate_pio_header(codigo_base ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
 
-# Lista de bibliotecas unificada e corrigida (sem o 's' em shardware_i2c)
+# Lista de bibliotecas unificada
 target_link_libraries(codigo_base
         pico_stdlib
         hardware_adc

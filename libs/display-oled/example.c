@@ -1,7 +1,7 @@
 #include "display_oled.h"
 
 int main(){
-    display_init();
+    init_display();
 
     write_text_display("Hello, World!", 0, 0);
 
