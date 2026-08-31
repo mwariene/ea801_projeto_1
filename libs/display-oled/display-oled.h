@@ -3,9 +3,12 @@
 
 #include "pico/stdlib.h"
 
-void init_display();
-void display_text(const char *text, intx int y);
-void clear_display();
-void write_pixel();
+// Funções simplificadas para o usuário
+void display_init(void);
+void clean_display(void);
+void write_text_display(const char *text, int x, int y);
+void clear_buffer(void);
+void draw_text_buffer(const char *text, int x, int y);
+void update_display(void);
 
 #endif

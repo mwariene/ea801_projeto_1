@@ -27,3 +27,26 @@ uint8_t joystick_read_y(void){
 bool joystick_button_pressed(void){
     return !gpio_get(joystick_sw_pin); // Return true if the button is pressed (active low)
 }
+
+#define ADC_CENTER 2048
+#define DEADZONE   300 // Tolerância do centro
+
+typedef enum {
+    JOY_CENTER = 0,
+    JOY_UP,
+    JOY_DOWN,
+    JOY_LEFT,
+    JOY_RIGHT
+} JoystickDir;
+
+JoystickDir joystick_get_direction(void) {
+    uint16_t x = joystick_read_x();
+    uint16_t y = joystick_read_y();
+
+    if (x < (ADC_CENTER - DEADZONE)) return JOY_LEFT;
+    if (x > (ADC_CENTER + DEADZONE)) return JOY_RIGHT;
+    if (y < (ADC_CENTER - DEADZONE)) return JOY_DOWN; // Inverter se necessário
+    if (y > (ADC_CENTER + DEADZONE)) return JOY_UP;
+
+    return JOY_CENTER;
+}
