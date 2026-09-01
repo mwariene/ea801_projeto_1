@@ -61,6 +61,9 @@ int main(){
                 if (joystick_button_pressed()){
                     State = state_running;
                 }
+                else (){
+                    State = case 0;
+                }
                 break;
             case 2:
                 clean_display();
@@ -71,6 +74,9 @@ int main(){
                 update_display();
                 if (joystick_button_pressed()){
                     State = state_func;
+                }
+                else (){
+                    State = case 0;
                 }
                 break;
             case 3:
@@ -84,7 +90,7 @@ int main(){
                 update_display();
                 // adc lógica de velocidade
                 if (joystick_button_pressed()){
-                    State = state_stop 
+                    State = state_stop;
                 }
                 break;
             case 4:
