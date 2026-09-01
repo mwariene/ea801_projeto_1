@@ -51,6 +51,7 @@ pico_enable_stdio_usb(main 1)
 target_link_libraries(main
     pico_stdlib
     hardware_i2c
+    hardware_adc
 )
 
 # Diretórios de inclusão
