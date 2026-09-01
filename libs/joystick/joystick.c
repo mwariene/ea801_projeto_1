@@ -14,14 +14,16 @@ void joystick_init(void){
     gpio_pull_up(joystick_sw_pin); // Enable pull-up resistor for the switch
 }
 
-uint8_t joystick_read_x(void){
+uint16_t joystick_read_x(void){
     adc_select_input(0); // Select ADC0 for X-axis
-    return adc_read(); // Read and return the X-axis value
+    uint16_t x_value = adc_read(); // Read the X-axis value
+    return x_value; // Return the X-axis value
 }
 
-uint8_t joystick_read_y(void){
+uint16_t joystick_read_y(void){
     adc_select_input(1); // Select ADC1 for Y-axis
-    return adc_read(); // Read and return the Y-axis value
+    uint16_t y_value = adc_read(); // Read the Y-axis value
+    return y_value; // Return the Y-axis value
 }
 
 bool joystick_button_pressed(void){
