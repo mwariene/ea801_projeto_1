@@ -27,5 +27,6 @@ void ssd1306_init(void);
 void render_on_display(uint8_t *buffer, struct render_area *area);
 void ssd1306_draw_string(uint8_t *buffer, int x, int y, char *text);
 void calculate_render_area_buffer_length(struct render_area *area);
+void ssd1306_draw_pixel(uint8_t *buffer, int x, int y, bool set);
 
 #endif

@@ -6,6 +6,8 @@
 #include "pico/binary_info.h"
 #include "hardware/i2c.h"
 #include "display-oled.h"
+#include "libs/bitdoglab.h"
+#include "hardware.h"
 // REMOVA: #include "hardware/adc.h"
 
 int main(){
@@ -13,15 +15,39 @@ int main(){
     
     display_init();
     clean_display();
+    buttons_init();
 
     while (true) {
-        // Prepara a memória com o texto
-        draw_text_buffer("Velocidade", 0, 0);
-        draw_text_buffer("20km/h",50,10);
-        draw_text_buffer("Velocidade Max", 0, 25);
-        draw_text_buffer("100km/h",50,35);
-        draw_text_buffer("Distancia", 0, 50);
-        draw_text_buffer("100km/h",50,60);
+        draw_text_buffer("Menu", 10,0);
+        draw_text_buffer("Start", 5, 10);
+        draw_text_buffer("Info",5,20);
+        if(gpio_get(button_A)==0){
+            draw_circle_display(0,13,2);
+            update_display();
+            sleep_ms(2000);
+            clean_display();
+            draw_text_buffer("Menu", 10,0);
+            draw_text_buffer("Start", 5, 10);
+            draw_text_buffer("Info",5,20);
+        }
+        if (gpio_get(button_B)==0){
+            draw_circle_display(0,23,2);
+            update_display();
+            sleep_ms(2000);
+            clean_display();
+            draw_text_buffer("Menu", 10,0);
+            draw_text_buffer("Start", 5, 10);
+            draw_text_buffer("Info",5,20);
+
+        }
+
+        // // Prepara a memória com o texto
+        // draw_text_buffer("Velocidade", 0, 0);
+        // draw_text_buffer("20km/h",50,10);
+        // draw_text_buffer("Velocidade Max", 0, 25);
+        // draw_text_buffer("100km/h",50,35);
+        // draw_text_buffer("Distancia", 0, 50);
+        // draw_text_buffer("100km/h",50,60);
         
         // Envia para o display físico
         update_display();

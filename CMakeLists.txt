@@ -35,6 +35,7 @@ add_executable(main
     main.c
     libs/display-oled/display-oled.c
     libs/display-oled/ssd1306.c
+    libs/inputs/buttons.c
 )
 
 # Configurações do programa
