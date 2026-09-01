@@ -12,91 +12,51 @@ if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
 # ====================================================================================
+set(PICO_PLATFORM rp2350-arm-s CACHE STRING "Platform type")
+set(PICO_BOARD pico2_w CACHE STRING "Board type")
+
 cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.3.0)
-set(toolchainVersion 15_2_Rel1)
-set(picotoolVersion 2.3.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-
-set(PICO_BOARD pico2_w CACHE STRING "Board type")
-
+# Inicializa o SDK do Pico
 include(pico_sdk_import.cmake)
 
-project(codigo_base C CXX ASM)
+# Define o projeto
+project(main C CXX ASM)
 
+# Inicializa o SDK
 pico_sdk_init()
 
-add_executable(codigo_base
+# Adiciona o executável APENAS com main.c e os módulos necessários
+add_executable(main
     main.c
-    libs/buzzer/buzzer.c
-    libs/leb_rgb/led_rgb.c
-    libs/led_matrix/led_matrix.c
-    libs/microphone/microphone.c
-    libs/inputs/buttons.c
-    libs/inputs/joystick.c
     libs/display-oled/display-oled.c
     libs/display-oled/ssd1306.c
 )
 
+# Configurações do programa
+pico_set_program_name(main "main")
+pico_set_program_version(main "0.1")
 
+# Habilita USB para debug
+pico_enable_stdio_uart(main 0)
+pico_enable_stdio_usb(main 1)
 
-pico_set_program_name(codigo_base "codigo_base")
-pico_set_program_version(codigo_base "0.1")
-pico_set_program_name(display_cfg "display_cfg")
-pico_set_program_version(display_cfg "0.1")
-
-# Comentado para não dar erro enquanto você não tiver o arquivo .pio criado
-# pico_generate_pio_header(codigo_base ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
-
-pico_enable_stdio_uart(codigo_base 0)
-pico_enable_stdio_usb(codigo_base 1)
-
-pico_generate_pio_header(codigo_base ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
-
-# Lista de bibliotecas unificada e corrigida (sem o 's' em shardware_i2c)
-target_link_libraries(codigo_base
-        pico_stdlib
-        hardware_adc
-        hardware_i2c
-        hardware_pio
-        hardware_pwm
-        hardware_dma
-        hardware_clocks
+# Bibliotecas necessárias (apenas as que você está usando)
+target_link_libraries(main
+    pico_stdlib
+    hardware_i2c
 )
 
-target_include_directories(codigo_base PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/libs
+# Diretórios de inclusão
+target_include_directories(main PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/libs
+    ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
 )
 
-pico_add_extra_outputs(codigo_base)
-
-# Exemplo do display OLED
-# Em seguida, no VS Code, selecione o target display_cfg como ativo antes de fazer upload.
-target_link_libraries(display_cfg
-        pico_stdlib
-        hardware_i2c
-)
-
-target_include_directories(display_cfg PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/libs
-        ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
-)
-
-pico_enable_stdio_uart(display_cfg 0)
-pico_enable_stdio_usb(display_cfg 1)
-pico_add_extra_outputs(display_cfg)
+# Saídas extras
+pico_add_extra_outputs(main)
