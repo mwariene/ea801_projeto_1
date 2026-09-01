@@ -17,20 +17,28 @@ int main(){
     clean_display();
     buttons_init();
 
+    draw_text_buffer("Menu", 10,0);
+    draw_text_buffer("Start", 5, 10);
+    draw_text_buffer("Info",5,20);
+
     while (true) {
-        draw_text_buffer("Menu", 10,0);
-        draw_text_buffer("Start", 5, 10);
-        draw_text_buffer("Info",5,20);
         if(gpio_get(button_A)==0){
             draw_circle_display(0,13,2);
             update_display();
             sleep_ms(2000);
             clean_display();
-            draw_text_buffer("Menu", 10,0);
-            draw_text_buffer("Start", 5, 10);
-            draw_text_buffer("Info",5,20);
+            update_display();
+            sleep_ms(500);
+            draw_text_buffer("Velocidade", 0, 0);
+            draw_text_buffer("20km/h",50,10);
+            draw_text_buffer("Velocidade Max", 0, 25);
+            draw_text_buffer("100km/h",50,35);
+            draw_text_buffer("Distancia", 0, 50);
+            draw_text_buffer("100km/h",50,60);
+            update_display();
+            
         }
-        if (gpio_get(button_B)==0){
+        else if (gpio_get(button_B)==0){
             draw_circle_display(0,23,2);
             update_display();
             sleep_ms(2000);
@@ -38,7 +46,6 @@ int main(){
             draw_text_buffer("Menu", 10,0);
             draw_text_buffer("Start", 5, 10);
             draw_text_buffer("Info",5,20);
-
         }
 
         // // Prepara a memória com o texto
