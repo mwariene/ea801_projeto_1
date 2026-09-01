@@ -36,6 +36,7 @@ add_executable(main
     libs/display-oled/display-oled.c
     libs/display-oled/ssd1306.c
     libs/inputs/buttons.c
+    libs/joystick/joystick.c
 )
 
 # Configurações do programa
@@ -57,6 +58,7 @@ target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/libs
     ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
+    ${CMAKE_CURRENT_LIST_DIR}/libs/joystick
 )
 
 # Saídas extras
