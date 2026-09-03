@@ -2,37 +2,22 @@
 #include "pico/stdlib.h"
 #include "libs/bitdoglab.h"
 #include "libs/hardware.h"
-#include "hardware/adc.h"
-#include "hardware/i2c.h"
-#include "hardware/pwm.h"
-
-
-// int main() {
-//     hardware_init();
-
-//     while (true) {
-//         while (gpio_get(button_A) == 0) {
-//             set_matrix_all(5, 0, 0, true, 300); // Vermelho piscando
-//         }
-        
-
-//         set_matrix_all(0, 0, 0, false, 0); // Apaga só quando nenhum botão está pressionado
-
-
-//         sleep_ms(50); // Debounce mais rápido
-//     }
-// }
-
-#include <stdio.h>
-#include "pico/stdlib.h"
-#include "libs/bitdoglab.h"
-#include "libs/hardware.h"
 #include "libs/display-oled/display-oled.h"
 #include "hardware/adc.h"
 #include "hardware/i2c.h"
 #include "hardware/pwm.h"
 
-void hardware_init() {
+// Enum for menu states
+typedef enum {
+    CURSOR_DEFAULT,
+    DISPLAY_DEFAULT,
+    DISPLAY_START,
+    DISPLAY_INFO,
+    DISPLAY_BACK
+} MenuState;
+
+void hardware_init()
+{
     stdio_init_all();
     led_rgb_init();
     led_matrix_init();
@@ -40,42 +25,51 @@ void hardware_init() {
     display_init();
 }
 
+// int
+
 int main() {
     hardware_init();
-    
-    clean_display();
-    draw_text_buffer("EA801", 40, 0);
-    draw_text_buffer("Projeto 1", 35, 10);
-    draw_text_buffer("BitDogLab", 30, 20);
-    update_display();
 
-    while (true) {
+    bool code = true;
+    float v_lim = 100; // Velocidade limite:  100 m/s
+    MenuState cursor = CURSOR_DEFAULT;       // Seleciona opções no display
+    MenuState display = DISPLAY_DEFAULT;
+
+    while (code)
+    {
+        // Tela inicial
         if (gpio_get(button_A) == 0) {
-            set_matrix_all(5, 0, 0, true, 300);
-            clear_buffer();
-            draw_text_buffer("EA801", 40, 0);
-            draw_text_buffer("Botao A", 40, 30);
-            update_display();
-        } else if (gpio_get(button_B) == 0) {
-            set_matrix_all(3, 3, 0, false, 300);
-            clear_buffer();
-            draw_text_buffer("EA801", 40, 0);
-            draw_text_buffer("Botao B", 40, 30);
-            update_display();
-        } else if (gpio_get(button_C) == 0) {
-            set_matrix_pixel(12, 0, 4, 0, true, 1000);
-            clear_buffer();
-            draw_text_buffer("EA801", 40, 0);
-            draw_text_buffer("Botao C", 40, 30);
-            update_display();
-        } else {
-            set_matrix_all(0, 0, 0, false, 0);
-            clear_buffer();
-            draw_text_buffer("EA801", 40, 0);
-            draw_text_buffer("Aguardando...", 25, 30);
-            update_display();
+            display = DISPLAY_START;
+        }
+        else if (gpio_get(button_B) == 0) {
+            cursor = DISPLAY_INFO;
+        }
+        else if (gpio_get(button_C) == 0) {
+            cursor = DISPLAY_BACK;
         }
 
+        // Tela inicial
+
+        switch (cursor) {
+
+        case DISPLAY_START:
+            clear_buffer();
+            draw_text_buffer("START", 0, 50);
+            update_display();
+        
+        case DISPLAY_INFO:
+            clear_buffer();
+            draw_text_buffer("INFOS", 0, 50);
+            update_display();
+
+        case DISPLAY_BACK:
+            draw_text_buffer("TELA INICIAL", 0, 60);
+            update_display();
+
+        default:
+            draw_text_buffer("TELA INICIAL", 0, 60);
+            update_display();
+        }
         sleep_ms(50);
     }
 }
