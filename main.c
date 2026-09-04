@@ -31,10 +31,9 @@ int main(){
     State current_state = state_menu;
 
     while (true) {
-        clean_display();
-        current_state = state_menu;
         switch(current_state){
             case state_menu:
+                clean_display();
                 draw_text_buffer("Menu", 10,0);
                 draw_text_buffer("Start", 5, 10);
                 draw_text_buffer("Info",5,20);
@@ -135,7 +134,7 @@ int main(){
         
         // Envia para o display físico
         update_display();
-        sleep_ms(100);
+        sleep_ms(500);
     }
     
     return 0;
