@@ -30,7 +30,13 @@ int main(){
 
     State current_state = state_menu;
 
+    State previous_state = -1;
+
     while (true) {
+        if (current_state != previous_state) {
+        clear_buffer();
+        previous_state = current_state;
+    }
         switch(current_state){
             case state_menu:
                 clean_display();
@@ -40,10 +46,13 @@ int main(){
                 update_display();
                 
                 uint16_t joy_y = joystick_read_y();
-                if (joy_y < 2048){
+                if (joy_y < 2000){
                     current_state = state_start;
-                } else if (joy_y > 2048){
+                } else if (joy_y > 2100){
                     current_state = state_info;
+                }
+                else if (joy_y > 2005 || joy_y < 2098){
+                    current_state = state_menu;
                 }
                 break;
             case state_start:
@@ -94,10 +103,13 @@ int main(){
                 update_display();
                 
                 uint16_t joy_y_stop = joystick_read_y();
-                if (joy_y_stop < 2048){
+                if (joy_y_stop < 2000){
                     current_state = state_stop_yes;
-                } else if (joy_y_stop > 2048){
+                } else if (joy_y_stop > 2100){
                     current_state = state_stop_no;
+                }
+                else if (joy_y > 2005 || joy_y < 2098){
+                    current_state = state_stop;
                 }
                 break;
             case state_func:
@@ -118,6 +130,9 @@ int main(){
                 if (joystick_button_pressed()){
                     current_state = state_menu;
                 }
+                else {
+                    current_state = state_stop;
+                }
                 break;
             case state_stop_no:
                 clean_display();
@@ -129,12 +144,14 @@ int main(){
                 if (joystick_button_pressed()){
                     current_state = state_running;
                 }
+                else {
+                    current_state = state_stop;
+                }
                 break;
         }
         
         // Envia para o display físico
-        update_display();
-        sleep_ms(500);
+        sleep_ms(1);
     }
     
     return 0;
