@@ -37,7 +37,10 @@ add_executable(main
     libs/display-oled/ssd1306.c
     libs/inputs/buttons.c
     libs/joystick/joystick.c
+    libs/led_matrix/led_matrix.c
 )
+
+pico_generate_pio_header(main ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
 
 # Configurações do programa
 pico_set_program_name(main "main")
@@ -52,6 +55,7 @@ target_link_libraries(main
     pico_stdlib
     hardware_i2c
     hardware_adc
+    hardware_pio
 )
 
 # Diretórios de inclusão
