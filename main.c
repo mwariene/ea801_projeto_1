@@ -214,7 +214,7 @@ int main(){
                     update_display();
 
                     if (gpio_get(button_A)==0){
-                        set_matrix_all(0,0,0,false,0);
+                        set_matrix_all(2,0,0,false,0);
                         above_max_velocity = true;
                     }
                     else if (gpio_get(button_B)==0){
@@ -236,6 +236,22 @@ int main(){
                     draw_text_buffer("100km/h",50,35);
                     draw_text_buffer("Distancia", 0, 50);
                     draw_text_buffer("100km/h",50,60);
+                    update_display();
+                    sleep_ms(20);
+                }
+                else if (velocity_int == 0 && gpio_get(button_C)==0) {   // estado de ré
+                    velocity_int += 10;
+                    snprintf(velocity, sizeof(velocity), "%u", velocity_int);
+
+                    clear_buffer();
+                    draw_text_buffer("Velocidade", 0, 0);
+                    draw_text_buffer("   km/h",50,10);
+                    draw_text_buffer(velocity, 47, 10);
+                    draw_text_buffer("Velocidade Max", 0, 25);
+                    draw_text_buffer("100km/h",50,35);
+                    draw_text_buffer("Distancia", 0, 50);
+                    draw_text_buffer("100km/h",50,60);
+                    draw_text_buffer("REVERSE",80,60);
                     update_display();
                     sleep_ms(20);
                 }
