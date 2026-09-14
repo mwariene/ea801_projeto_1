@@ -44,8 +44,13 @@ int main(){
     uint8_t velocity_int = 0;
     uint8_t max_velocity = 100;
     bool above_max_velocity = false;
+    bool reverse_dir = false;
     char velocity[4];
+    uint8_t distance_int = 0;
+    char distance[4];
+
     snprintf(velocity, sizeof(velocity), "%u", velocity_int);
+    snprintf(distance, sizeof(distance), "%u", distance_int);
 
     while (true) {
         bool button_pressed = joystick_button_pressed();
@@ -241,7 +246,23 @@ int main(){
                     update_display();
                     sleep_ms(20);
                 }
-                else if (velocity_int == 0 && gpio_get(button_C)==0) {   // estado de ré
+                else if (reverse_dir || (velocity_int == 0 && gpio_get(button_C)==0)) {
+                    reverse_dir = true;
+                    set_matrix_all(0,0,0,false,0);
+
+                    if (gpio_get(button_A) == 0) {
+                        velocity_int += 10;
+                    }
+                    else if (gpio_get(button_B) == 0) {
+                        if (velocity_int >= 10) {
+                            velocity_int -= 10;
+                        }
+                        if (velocity_int == 0) {
+                            reverse_dir = false;
+                        }
+                    }
+
+                    snprintf(velocity, sizeof(velocity), "%u", velocity_int);
                     clear_buffer();
                     draw_text_buffer("Velocidade", 0, 0);
                     draw_text_buffer("   km/h",50,10);
@@ -249,28 +270,12 @@ int main(){
                     draw_text_buffer("Velocidade Max", 0, 25);
                     draw_text_buffer("100km/h",50,35);
                     draw_text_buffer("Distancia", 0, 50);
-                    draw_text_buffer("100km/h",50,60);
+                    draw_text_buffer("tras",50,60);
                     draw_text_buffer("REVERSE",20,80);
                     update_display();
                     sleep_ms(20);
-                    if (gpio_get(button_A) == 0) {
-                        velocity_int += 10;
-                        snprintf(velocity, sizeof(velocity), "%u", velocity_int);
-
-                        clear_buffer();
-                        draw_text_buffer("Velocidade", 0, 0);
-                        draw_text_buffer("   km/h",50,10);
-                        draw_text_buffer(velocity, 47, 10);
-                        draw_text_buffer("Velocidade Max", 0, 25);
-                        draw_text_buffer("100km/h",50,35);
-                        draw_text_buffer("Distancia", 0, 50);
-                        draw_text_buffer("100km/h",50,60);
-                        draw_text_buffer("REVERSE",20,80);
-                        update_display();
-                        sleep_ms(20);
-                    }
                 }
-                else{
+                else {
                     set_matrix_all(0,0,0,false,0);
                     if (gpio_get(button_A) == 0) {
                         velocity_int += 10;
@@ -298,16 +303,32 @@ int main(){
                         }
                         snprintf(velocity, sizeof(velocity), "%u", velocity_int);
 
-                        clear_buffer();
-                        draw_text_buffer("Velocidade", 0, 0);
-                        draw_text_buffer("   km/h",50,10);
-                        draw_text_buffer(velocity, 47, 10);
-                        draw_text_buffer("Velocidade Max", 0, 25);
-                        draw_text_buffer("100km/h",50,35);
-                        draw_text_buffer("Distancia", 0, 50);
-                        draw_text_buffer("100km/h",50,60);
-                        update_display();
-                        sleep_ms(20);
+                        if (!reverse_dir) { // Modo normal
+                            clear_buffer();
+                            draw_text_buffer("Velocidade", 0, 0);
+                            draw_text_buffer("   km/h",50,10);
+                            draw_text_buffer(velocity, 47, 10);
+                            draw_text_buffer("Velocidade Max", 0, 25);
+                            draw_text_buffer("100km/h",50,35);
+                            draw_text_buffer("Distancia", 0, 50);
+                            draw_text_buffer("frente",50,60);
+                            update_display();
+                            sleep_ms(20);
+                        }
+                        else {   // Modo ré
+                            clear_buffer();
+                            draw_text_buffer("Velocidade", 0, 0);
+                            draw_text_buffer("   km/h",50,10);
+                            draw_text_buffer(velocity, 47, 10);
+                            draw_text_buffer("Velocidade Max", 0, 25);
+                            draw_text_buffer("100km/h",50,35);
+                            draw_text_buffer("Distancia", 0, 50);
+                            draw_text_buffer("tras",50,60);
+                            draw_text_buffer("REVERSE",20,80);
+                            update_display();
+                            sleep_ms(20);
+                        }
+                        
                     }
                 }
 
