@@ -206,7 +206,12 @@ int main(){
             case state_func:
                 clear_buffer();
                 draw_text_buffer("Voltar", 5, 10);
-                draw_text_buffer("A: acelera", 0, 30);
+                draw_text_buffer("Infos", 0, 30);
+                draw_text_buffer("A: acelera", 0, 50);
+                draw_text_buffer("B: desacelera", 0, 60);
+                draw_text_buffer("C: muda direcao", 0, 70);
+                draw_text_buffer("Mariana", 0, 110);
+                draw_text_buffer("Marina", 0, 120);
                 draw_circle_display(0,13,2); 
                 update_display();
                 if (button_clicked){
@@ -272,8 +277,10 @@ int main(){
                         draw_text_buffer("desligando..", 0, 40);
                         sleep_ms(50);
                         draw_text_buffer("desligando...", 0, 40);
+                        update_display();
                         sleep_ms(2000);
                         clear_buffer();
+                        update_display();
                         current_state = state_start;
                         reverse_zero_since_ms = 0;
                     }
