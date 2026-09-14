@@ -37,6 +37,7 @@ add_executable(main
     libs/display-oled/ssd1306.c
     libs/inputs/buttons.c
     libs/joystick/joystick.c
+    libs/leb_rgb/led_rgb.c
     libs/led_matrix/led_matrix.c
 )
 
@@ -56,6 +57,7 @@ target_link_libraries(main
     hardware_i2c
     hardware_adc
     hardware_pio
+    hardware_pwm
 )
 
 # Diretórios de inclusão

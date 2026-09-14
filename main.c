@@ -157,6 +157,7 @@ int main(){
                         draw_text_buffer("Distancia", 0, 45);
                         draw_text_buffer(distance,50,55);
                         update_display();
+                        set_led_rgb(200,200,0);
                         last_display_ms = current_ms;
                         previous_state = current_state;
                     }
@@ -336,9 +337,12 @@ int main(){
                     else if (gpio_get(button_B) == 0) {
                         if (velocity_int >= 10) {
                             velocity_int -= 10;
+                            set_led_rgb(200,0,0);
                         }
                         if (velocity_int == 0) {
                             reverse_dir = false;
+                            set_led_rgb(0,0,0);
+
                         }
                     }
 
@@ -369,6 +373,7 @@ int main(){
                         draw_text_buffer("100km/h",50,35);
                         draw_text_buffer("Distancia", 0, 45);
                         draw_text_buffer(distance,50,55);
+                        set_led_rgb(0,200,0);
                         update_display();
                         sleep_ms(20);
                     }
@@ -376,6 +381,7 @@ int main(){
                     else if (gpio_get(button_B)==0){
                         if (velocity_int >= 10) {
                             velocity_int -= 10;
+                            set_led_rgb(200,0,0);
                         }
                         else {
                             velocity_int = 0;
