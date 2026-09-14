@@ -9,6 +9,7 @@
 #include "libs/bitdoglab.h"
 #include "hardware.h"
 #include "joystick.h"
+#include "buzzer.h"
 
 typedef enum {
     state_menu, // 0
@@ -49,6 +50,7 @@ int main(){
     buttons_init();
     led_matrix_init();
     led_rgb_init();
+    buzzer_init();
     display_init();
     clean_display();
     joystick_init();
@@ -291,6 +293,7 @@ int main(){
                 }
 
                 if (velocity_int >= max_velocity && !above_max_velocity){ // Atinge o limite
+                    buzzer_beep(200);
                     set_matrix_all(5,0,0,false,0);
                     draw_text_buffer("Limite", 0, 80);
                     draw_text_buffer("Atingido", 0, 90);

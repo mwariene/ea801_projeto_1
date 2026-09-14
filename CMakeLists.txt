@@ -35,6 +35,7 @@ add_executable(main
     main.c
     libs/display-oled/display-oled.c
     libs/display-oled/ssd1306.c
+    libs/buzzer/buzzer.c
     libs/inputs/buttons.c
     libs/joystick/joystick.c
     libs/leb_rgb/led_rgb.c
@@ -64,6 +65,7 @@ target_link_libraries(main
 target_include_directories(main PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/libs
+    ${CMAKE_CURRENT_LIST_DIR}/libs/buzzer
     ${CMAKE_CURRENT_LIST_DIR}/libs/display-oled
     ${CMAKE_CURRENT_LIST_DIR}/libs/joystick
 )
