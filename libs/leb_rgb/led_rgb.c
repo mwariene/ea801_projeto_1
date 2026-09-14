@@ -46,3 +46,9 @@ void led_rgb_init() {
     pwm_set_enabled(slice_blue, true);
 
 }
+
+void set_led_rgb(int r, int g, int b) {
+     pwm_set_gpio_level(LED_RED, r);
+    pwm_set_gpio_level(LED_GREEN, g);
+    pwm_set_gpio_level(LED_BLUE, b);
+}

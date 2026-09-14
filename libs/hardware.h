@@ -12,6 +12,7 @@ void joystick_init(void);
 
 // Funções do LED RGB
 void led_rgb_init(void);
+void set_led_rgb(int r, int g, int b);
 
 // Funções da Matriz de LEDs
 void led_matrix_init(void);

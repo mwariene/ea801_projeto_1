@@ -48,6 +48,7 @@ int main(){
     stdio_init_all();
     buttons_init();
     led_matrix_init();
+    led_rgb_init();
     display_init();
     clean_display();
     joystick_init();
@@ -327,6 +328,7 @@ int main(){
                 else if (reverse_dir || (velocity_int == 0 && gpio_get(button_C)==0)) {
                     reverse_dir = true;
                     set_matrix_all(0,0,0,false,0);
+                    set_led_rgb(0,0,200);
 
                     if (gpio_get(button_A) == 0) {
                         velocity_int += 10;
