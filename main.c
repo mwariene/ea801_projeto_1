@@ -69,6 +69,7 @@ int main(){
     uint32_t time_remainder_ms = 0;
     uint32_t last_distance_ms = to_ms_since_boot(get_absolute_time());
     uint32_t last_display_ms = 0;
+    uint32_t reverse_zero_since_ms = 0;
     bool above_max_velocity = false;
     bool reverse_dir = false;
     char velocity[4];
@@ -205,6 +206,7 @@ int main(){
             case state_func:
                 clear_buffer();
                 draw_text_buffer("Voltar", 5, 10);
+                draw_text_buffer("A: acelera", 0, 30);
                 draw_circle_display(0,13,2); 
                 update_display();
                 if (button_clicked){
@@ -250,6 +252,34 @@ int main(){
                                 &time_remainder_ms, &last_distance_ms);
                 snprintf(distance, sizeof(distance), "%ld m",
                          (long)distance_m);
+
+                if (reverse_dir && velocity_int == 0) {
+                    uint32_t current_ms = to_ms_since_boot(get_absolute_time());
+                    bool action = button_clicked || gpio_get(button_A) == 0 ||
+                                  gpio_get(button_B) == 0 || gpio_get(button_C) == 0;
+
+                    if (action) {
+                        reverse_zero_since_ms = current_ms;
+                    } else if (reverse_zero_since_ms == 0) {
+                        reverse_zero_since_ms = current_ms;
+                    } else if (current_ms - reverse_zero_since_ms >= 5000) { // Aguarda 5 segundos
+                        reverse_dir = false;
+                        clear_buffer();
+                        draw_text_buffer("desligando", 0, 40);
+                        sleep_ms(50);
+                        draw_text_buffer("desligando.",0 , 40);
+                        sleep_ms(50);
+                        draw_text_buffer("desligando..", 0, 40);
+                        sleep_ms(50);
+                        draw_text_buffer("desligando...", 0, 40);
+                        sleep_ms(2000);
+                        clear_buffer();
+                        current_state = state_start;
+                        reverse_zero_since_ms = 0;
+                    }
+                } else {
+                    reverse_zero_since_ms = 0;
+                }
 
                 if (velocity_int >= max_velocity && !above_max_velocity){ // Atinge o limite
                     set_matrix_all(5,0,0,false,0);
