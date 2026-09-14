@@ -23,14 +23,23 @@ typedef enum {
     state_reverse // 9
 } State;
 
-static void update_distance(uint8_t velocity_kmh, uint32_t *distance_m,
-                            uint32_t *time_remainder_ms, uint32_t *last_ms) {
+static void update_distance(uint8_t velocity_kmh, bool reverse,
+                            int32_t *distance_m, uint32_t *time_remainder_ms,
+                            uint32_t *last_ms) {
     uint32_t current_ms = to_ms_since_boot(get_absolute_time());
     uint32_t elapsed_ms = current_ms - *last_ms;
     uint64_t distance_numerator = (uint64_t)velocity_kmh * elapsed_ms
                                 + *time_remainder_ms;
 
-    *distance_m += distance_numerator / 3600;
+    int32_t distance_delta = distance_numerator / 3600;
+    if (reverse) {
+        *distance_m -= distance_delta;
+        if (*distance_m < 0) {
+            *distance_m = 0;
+        }
+    } else {
+        *distance_m += distance_delta;
+    }
     *time_remainder_ms = distance_numerator % 3600;
     *last_ms = current_ms;
 }
@@ -56,7 +65,7 @@ int main(){
     uint8_t count_A = 0;
     uint8_t velocity_int = 0;
     uint8_t max_velocity = 100;
-    uint32_t distance_m = 0;
+    int32_t distance_m = 0;
     uint32_t time_remainder_ms = 0;
     uint32_t last_distance_ms = to_ms_since_boot(get_absolute_time());
     uint32_t last_display_ms = 0;
@@ -65,7 +74,7 @@ int main(){
     char velocity[4];
     char distance[12];
     snprintf(velocity, sizeof(velocity), "%u", velocity_int);
-    snprintf(distance, sizeof(distance), "%lu m", (unsigned long)distance_m);
+    snprintf(distance, sizeof(distance), "%ld m", (long)distance_m);
 
     while (true) {
         bool button_pressed = joystick_button_pressed();
@@ -131,10 +140,10 @@ int main(){
 
             case state_running:
                 {
-                    update_distance(velocity_int, &distance_m,
+                    update_distance(velocity_int, reverse_dir, &distance_m,
                                     &time_remainder_ms, &last_distance_ms);
-                    snprintf(distance, sizeof(distance), "%lu m",
-                             (unsigned long)distance_m);
+                    snprintf(distance, sizeof(distance), "%ld m",
+                             (long)distance_m);
                     uint32_t current_ms = to_ms_since_boot(get_absolute_time());
                     if (current_state != previous_state ||
                         current_ms - last_display_ms >= 500) {
@@ -237,21 +246,13 @@ int main(){
                 break;
 
             case state_change_velocity:
-                update_distance(velocity_int, &distance_m,
+                update_distance(velocity_int, reverse_dir, &distance_m,
                                 &time_remainder_ms, &last_distance_ms);
-                snprintf(distance, sizeof(distance), "%lu m",
-                         (unsigned long)distance_m);
+                snprintf(distance, sizeof(distance), "%ld m",
+                         (long)distance_m);
 
                 if (velocity_int >= max_velocity && !above_max_velocity){ // Atinge o limite
                     set_matrix_all(5,0,0,false,0);
-                    clear_buffer();
-                    draw_text_buffer("Velocidade", 0, 0);
-                    draw_text_buffer("   km/h",50,10);
-                    draw_text_buffer(velocity, 47, 10);
-                    draw_text_buffer("Velocidade Max", 0, 25);
-                    draw_text_buffer("100km/h",50,35);
-                    draw_text_buffer("Distancia", 0, 45);
-                    draw_text_buffer(distance,50,55);
                     draw_text_buffer("Limite", 0, 80);
                     draw_text_buffer("Atingido", 0, 90);
                     draw_text_buffer("A: continuar", 0, 110);
@@ -311,7 +312,7 @@ int main(){
                     draw_text_buffer("100km/h",50,35);
                     draw_text_buffer("Distancia", 0, 45);
                     draw_text_buffer(distance,50,55);
-                    draw_text_buffer("REVERSE",20,80);
+                    draw_text_buffer("REVERSE",20,65);
                     update_display();
                     sleep_ms(20);
                 }
@@ -383,10 +384,10 @@ int main(){
                     draw_text_buffer("Distancia", 0, 45);
                     draw_text_buffer(distance,50,55);
                     if (reverse_dir) {
-                        draw_text_buffer("REVERSE",20,80);
+                        draw_text_buffer("REVERSE",20,65);
                     }
                     else{
-                        draw_text_buffer("frente",20,80);
+                        draw_text_buffer("frente",20,65);
                     }
                     update_display();
                     last_display_ms = current_change_ms;
