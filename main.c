@@ -218,6 +218,7 @@ int main(){
                         above_max_velocity = true;
                     }
                     else if (gpio_get(button_B)==0){
+                        set_matrix_all(0,0,0,false,0);
                         velocity_int = 0;
                         above_max_velocity = false;
                         current_state = state_running;
@@ -226,6 +227,7 @@ int main(){
                 }
                 else if (velocity_int < 0) {
                     velocity_int = 0;
+                    set_matrix_all(1,1,0,false,0);
                     snprintf(velocity, sizeof(velocity), "%u", velocity_int);
 
                     clear_buffer();
@@ -251,12 +253,12 @@ int main(){
                     draw_text_buffer("100km/h",50,35);
                     draw_text_buffer("Distancia", 0, 50);
                     draw_text_buffer("100km/h",50,60);
-                    draw_text_buffer("REVERSE",80,60);
+                    draw_text_buffer("REVERSE",20,80);
                     update_display();
                     sleep_ms(20);
                 }
                 else{
-                
+                    set_matrix_all(0,0,0,false,0);
                     if (gpio_get(button_A) == 0) {
                         velocity_int += 10;
                         snprintf(velocity, sizeof(velocity), "%u", velocity_int);
