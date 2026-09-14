@@ -204,19 +204,38 @@ int main(){
                 break;
 
             case state_change_velocity:
-                if (velocity_int > max_velocity){
+                if (velocity_int > max_velocity & velocity_int >= 0){ // Atinge o limite
                     set_matrix_all(5,0,0,false,0);
                     draw_text_buffer("Limite", 0, 80);
                     draw_text_buffer("Atingido", 0, 90);
-                    draw_text_buffer("Aperte botao", 0, 110);
+                    draw_text_buffer("A: continuar", 0, 110);
+                    draw_text_buffer("B: parar", 0, 120);
                     update_display();
 
-                    if (button_clicked){
+                    if (gpio_get(button_A)==0){
                         set_matrix_all(0,0,0,false,0);
+                        current_state = state_change_velocity;
+                    }
+                    else if (gpio_get(button_B)==0){
+                        set_matrix_all(2,0,0,false,0); // Continua acima do limite
                         current_state = state_start;
                     }
                     
-                    
+                }
+                else if (velocity_int < 0) {
+                    velocity_int = 0;
+                    snprintf(velocity, sizeof(velocity), "%u", velocity_int);
+
+                    clear_buffer();
+                    draw_text_buffer("Velocidade", 0, 0);
+                    draw_text_buffer("   km/h",50,10);
+                    draw_text_buffer("0", 47, 10);
+                    draw_text_buffer("Velocidade Max", 0, 25);
+                    draw_text_buffer("100km/h",50,35);
+                    draw_text_buffer("Distancia", 0, 50);
+                    draw_text_buffer("100km/h",50,60);
+                    update_display();
+                    sleep_ms(20);
                 }
                 else{
                 
